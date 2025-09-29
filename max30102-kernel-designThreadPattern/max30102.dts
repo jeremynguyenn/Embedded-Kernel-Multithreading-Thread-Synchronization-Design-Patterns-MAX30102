@@ -1,0 +1,26 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2711";
+
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+
+            max30102: max30102@57 {
+                compatible = "maxim,max30102";
+                reg = <0x57>;
+                int-gpios = <&gpio 17 0>;
+                reset-gpios = <&gpio 18 0>;  // Added reset GPIO on pin 18
+                led1-current-mA = <6>;
+                led2-current-mA = <6>;
+                interrupt-parent = <&gpio>;
+                interrupts = <17 IRQ_TYPE_EDGE_FALLING>;
+                vcc-supply = <&regulator_vcc>;  // Added regulator support
+                #io-channel-cells = <0>;  // For hwmon integration
+            };
+        };
+    };
+};
